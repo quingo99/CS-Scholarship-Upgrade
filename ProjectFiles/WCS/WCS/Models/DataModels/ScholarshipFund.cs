@@ -26,6 +26,10 @@ namespace WCS.Models
                     try
                     {
                         double amt = Amount;
+                        if(AwardMonies == null)
+                        {
+                            return amt;
+                        }
                         foreach (ScholarshipAwardMoney awarded in AwardMonies)
                             try
                             {
