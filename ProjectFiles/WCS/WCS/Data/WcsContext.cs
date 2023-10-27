@@ -27,7 +27,6 @@ namespace WCS.Data
         public DbSet<ScholarshipAward> ScholarshipAwards { get; set; }
         public DbSet<ScholarshipAwardMoney> ScholarshipAwardMonies { get; set; }
         public DbSet<StudentRating> StudentRatings { get; set; }
-        public DbSet<Invite> Invites { get; set; }
         public DbSet<RecycledItem> RecycleBin { get; set; }
         public DbSet<Setting> Settings { get; set; }
 

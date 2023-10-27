@@ -32,6 +32,5 @@ namespace WCS.Models.AccountViewModels
 
         public string Role { get; set; }
 
-        public string InviteCode { get; set; }
     }
 }

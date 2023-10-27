@@ -233,6 +233,7 @@ namespace WCS.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(string code, string returnUrl = null)
         {
+/*
             if (code != null)
             {
                 var invite = _context.Invites.Where(i => i.InviteCode == code).FirstOrDefault();
@@ -256,7 +257,7 @@ namespace WCS.Controllers
                     ViewData["ExpiredCode"] = true;
                 }
             }
-
+*/
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -274,7 +275,10 @@ namespace WCS.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
+/*
+ *  *****
+ *  ***** Removed for invite functionality removal *****
+ *  *****
                     //Check for code
                     var invite = _context.Invites.Where(i => i.InviteCode == model.InviteCode).FirstOrDefault();
                     if (invite != null) //Has valid code
@@ -291,6 +295,10 @@ namespace WCS.Controllers
                     }
                     else //Does not have a valid invite code
                     {
+*****
+***** Moved further down to allow student continued access
+*****
+
                         //Add user to student role
                         var roleResult = await _userManager.AddToRoleAsync(user, "Student");
                         if (roleResult.Succeeded)
@@ -298,7 +306,13 @@ namespace WCS.Controllers
                             _logger.LogInformation(user.Email.ToString() + " was added to the Student role.");
                         }
                     }
-
+*/
+                    //Add user to student role
+                    var roleResult = await _userManager.AddToRoleAsync(user, "Student");
+                    if (roleResult.Succeeded)
+                    {
+                        _logger.LogInformation(user.Email.ToString() + " was added to the Student role.");
+                    }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);

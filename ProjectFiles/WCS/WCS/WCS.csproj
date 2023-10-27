@@ -5,11 +5,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Models\StudentViewModels\**" />
+    <Compile Remove="Views\Invites\**" />
     <Content Remove="Models\StudentViewModels\**" />
+    <Content Remove="Views\Invites\**" />
     <EmbeddedResource Remove="Models\StudentViewModels\**" />
+    <EmbeddedResource Remove="Views\Invites\**" />
     <None Remove="Models\StudentViewModels\**" />
+    <None Remove="Views\Invites\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Controllers\InvitesController.cs" />
     <Compile Remove="Data\Migrations\20180621161330_IRecycleAdd.cs" />
     <Compile Remove="Data\Migrations\20180621161330_IRecycleAdd.Designer.cs" />
     <Compile Remove="Data\Migrations\20180621162226_IRecycleAdd.cs" />
@@ -32,6 +37,13 @@
     <Compile Remove="Data\Migrations\20180621205901_IRecycleUpdate4.Designer.cs" />
     <Compile Remove="Data\Migrations\20180622153011_IRecycleUpdate5.cs" />
     <Compile Remove="Data\Migrations\20180622153011_IRecycleUpdate5.Designer.cs" />
+    <Compile Remove="Models\DataModels\Invite.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Admin\CreateInvite.cshtml" />
+    <Content Remove="Views\Admin\DeleteInvite.cshtml" />
+    <Content Remove="Views\Admin\EditInvite.cshtml" />
+    <Content Remove="Views\Admin\Invites.cshtml" />
   </ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />

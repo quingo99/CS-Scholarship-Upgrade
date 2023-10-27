@@ -29,11 +29,11 @@
             <div class="award-btn btn-close-cycle" title="Close the current award cycle" onclick="closeAwardCycle()">Close Award Cycle</div>
         </div>
     }
-    <div class="col-md-8">
-        @Html.Partial("_ScholarshipList", Model.Scholarships)
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         @Html.Partial("_StudentRatings", Model.StudentRatingsListPack)
+    </div>
+    <div class="col-md-6">
+        @Html.Partial("_ScholarshipList", Model.Scholarships)
     </div>
 </div>
 <div class="row">

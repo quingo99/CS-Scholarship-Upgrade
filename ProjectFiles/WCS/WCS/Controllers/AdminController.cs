@@ -469,135 +469,141 @@ namespace WCS.Controllers
 
         #endregion
 
+
         #region Invite Management
-        // GET : Invites
-        public async Task<IActionResult> Invites()
-        {
-            return View(await _context.Invites.ToListAsync());
-        }
-
-        // GET: Invites/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // GET: Invites/Create
-        public IActionResult CreateInvite()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateInvite([Bind("Id,FirstName,LastName,EmailAddress,Role")] Invite invite)
-        {
-            if (ModelState.IsValid)
-            {
-                invite.ExpirationDate = DateTime.Now.AddDays(14);
-                invite.Status = "Invited";
-                invite.GenerateInviteCode();
-                _context.Add(invite);
-                await _context.SaveChangesAsync();
-
-                //Send invite email
-                var callbackUrl = Url.InviteCallbackLink(invite.InviteCode, Request.Scheme);
-                await _emailSender.SendInviteAsync(invite.EmailAddress, invite.FullName, invite.Role, callbackUrl);
-
-                return RedirectToAction(nameof(Invites));
-            }
-            return View(invite);
-        }
-
-        public async Task<IActionResult> EditInvite(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var invite = await _context.Invites.SingleOrDefaultAsync(m => m.Id == id);
-            if (invite == null)
-            {
-                return NotFound();
-            }
-            return View(invite);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditInvite(int id, [Bind("Id,FirstName,LastName,EmailAddress,Role")] Invite invite)
-        {
-            if (id != invite.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+        /*     *****
+        *     ***** No longer necessary and goes unused, may be removed completely *****
+        *     *****
+        *  
+                // GET : Invites
+                public async Task<IActionResult> Invites()
                 {
-                    invite.ExpirationDate = DateTime.Now.AddDays(14);
-                    invite.Status = "Invited";
-                    invite.GenerateInviteCode();
-
-                    _context.Update(invite);
-                    await _context.SaveChangesAsync();
-
-                    //Send invite email
-                    var callbackUrl = Url.InviteCallbackLink(invite.InviteCode, Request.Scheme);
-                    await _emailSender.SendInviteAsync(invite.EmailAddress, invite.FullName, invite.Role, callbackUrl);
-
+                    return View(await _context.Invites.ToListAsync());
                 }
-                catch (DbUpdateConcurrencyException)
+
+                // GET: Invites/Create
+                public IActionResult Create()
                 {
-                    if (!InviteExists(invite.Id))
+                    return View();
+                }
+
+                // GET: Invites/Create
+                public IActionResult CreateInvite()
+                {
+                    return View();
+                }
+
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> CreateInvite([Bind("Id,FirstName,LastName,EmailAddress,Role")] Invite invite)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        invite.ExpirationDate = DateTime.Now.AddDays(14);
+                        invite.Status = "Invited";
+                        invite.GenerateInviteCode();
+                        _context.Add(invite);
+                        await _context.SaveChangesAsync();
+
+                        //Send invite email
+                        var callbackUrl = Url.InviteCallbackLink(invite.InviteCode, Request.Scheme);
+                        await _emailSender.SendInviteAsync(invite.EmailAddress, invite.FullName, invite.Role, callbackUrl);
+
+                        return RedirectToAction(nameof(Invites));
+                    }
+                    return View(invite);
+                }
+
+                public async Task<IActionResult> EditInvite(int? id)
+                {
+                    if (id == null)
                     {
                         return NotFound();
                     }
-                    else
+
+                    var invite = await _context.Invites.SingleOrDefaultAsync(m => m.Id == id);
+                    if (invite == null)
                     {
-                        throw;
+                        return NotFound();
                     }
+                    return View(invite);
                 }
-                return RedirectToAction(nameof(Invites));
-            }
-            return View(invite);
-        }
 
-        // GET: Invites/Delete/5
-        public async Task<IActionResult> DeleteInvite(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> EditInvite(int id, [Bind("Id,FirstName,LastName,EmailAddress,Role")] Invite invite)
+                {
+                    if (id != invite.Id)
+                    {
+                        return NotFound();
+                    }
 
-            var invite = await _context.Invites
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (invite == null)
-            {
-                return NotFound();
-            }
+                    if (ModelState.IsValid)
+                    {
+                        try
+                        {
+                            invite.ExpirationDate = DateTime.Now.AddDays(14);
+                            invite.Status = "Invited";
+                            invite.GenerateInviteCode();
 
-            return View(invite);
-        }
+                            _context.Update(invite);
+                            await _context.SaveChangesAsync();
 
-        // POST: Invites/Delete/5
-        [HttpPost, ActionName("DeleteInvite")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteInviteConfirmed(int id)
-        {
-            var invite = await _context.Invites.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Invites.Remove(invite);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+                            //Send invite email
+                            var callbackUrl = Url.InviteCallbackLink(invite.InviteCode, Request.Scheme);
+                            await _emailSender.SendInviteAsync(invite.EmailAddress, invite.FullName, invite.Role, callbackUrl);
 
-        private bool InviteExists(int id)
-        {
-            return _context.Invites.Any(e => e.Id == id);
-        }
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!InviteExists(invite.Id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                        return RedirectToAction(nameof(Invites));
+                    }
+                    return View(invite);
+                }
+
+                // GET: Invites/Delete/5
+                public async Task<IActionResult> DeleteInvite(int? id)
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var invite = await _context.Invites
+                        .SingleOrDefaultAsync(m => m.Id == id);
+                    if (invite == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return View(invite);
+                }
+
+                // POST: Invites/Delete/5
+                [HttpPost, ActionName("DeleteInvite")]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> DeleteInviteConfirmed(int id)
+                {
+                    var invite = await _context.Invites.SingleOrDefaultAsync(m => m.Id == id);
+                    _context.Invites.Remove(invite);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+                private bool InviteExists(int id)
+                {
+                    return _context.Invites.Any(e => e.Id == id);
+                }
+*/
         #endregion
 
         #region Settings
